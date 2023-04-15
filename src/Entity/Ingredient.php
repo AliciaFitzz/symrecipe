@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\IngredientRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: IngredientRepository::class)]
 class Ingredient
@@ -13,14 +15,34 @@ class Ingredient
     #[ORM\Column]
     private ?int $id = null;
 
+    // contrainte qui signifie qu'on veux 2 caractère min et 50 max
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Le nom doit avoir minimum 2 caractères',
+        maxMessage: 'Le nom doit avoir maximum 50 caractères',
+    )]
+    // pour pas que les données soient null ou string vide
+    #[Assert\NotBlank]
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
+    // Positive indique qu'on veut un nombre supérieur à 0, LessThan qu'on veux moins de 200    
+    #[Assert\Positive]
+    #[Assert\LessThan(200)]
+    #[Assert\NotNull]
     #[ORM\Column]
     private ?float $price = null;
 
+    #[Assert\NotNull]
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    public function __construct()
+    {
+        // Pour dire qu'à chaque fois qu'un indrédient va se construire, il aura la date actuelle
+        $this->createdAt = new DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
