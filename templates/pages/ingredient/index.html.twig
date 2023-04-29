@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SymRecipe - Mes ngrédients{% endblock %}
+
+{% block body %}
+
+<div class="container mt-4">
+{% if not ingredients.items is same as([]) %}
+
+<h1>Mes ingrédients</h1>
+
+<a href="{{ path('new_ingredient') }}" class="btn btn-primary">Créer un ingrédient</a>
+
+    {# message de succès de soumission du form #}
+    {% for message in app.flashes('success') %}
+			<div class="alert alert-success mt-4">
+				{{ message }}
+			</div>
+		{% endfor %}
+
+{# total items count #}
+<div class="count mt-4">
+    <p> Il y a {{ ingredients.getTotalItemCount }} ingrédients au total.</p>
+</div>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Numéro</th>
+      <th scope="col">Nom</th>
+      <th scope="col">Prix</th>
+      <th scope="col">Date de création</th>
+      <th scope="col">Modifier</th>
+      <th scope="col">Supprimer</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for ingredient in ingredients %}
+     <tr class="table-primary">
+      <th scope="row">{{ ingredient.id }}</th>
+      <td>{{ ingredient.name }}</td>
+      <td>{{ ingredient.price }}</td>
+      {# pour afficher une date il faut utiliser le filtre date sinon twig essai de la lire en string #}
+      <td>{{ ingredient.createdAt|date("d/m/Y") }}</td>
+      <td>
+        <a href="{{ path('edit_ingredient', {id: ingredient.id}) }}" class="btn btn-info">Modifier</a>
+      </td>
+      <td>
+        <a href="{{ path('delete_ingredient', {id: ingredient.id}) }}" class="btn btn-warning">Supprimer</a>
+      </td>
+    </tr>
+    {% else %}
+      <p>Il n'y a pas d'ingrédients</p>
+{% endfor %}
+  </tbody>
+</table>
+
+<div class="navigation d-flex justify-content-center">
+    {{ knp_pagination_render(ingredients) }}
+</div>
+{% endif %}
+</div>
+
+{% endblock %}
