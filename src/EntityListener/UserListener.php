@@ -16,15 +16,15 @@ class UserListener
         $this->hasher = $hasher;
     }
 
-    public function prePersit(User $user)
+    public function prePersist(User $user)
     {
         $this->encodePassword($user);
     }
 
-    // public function preUpdate(User $user)
-    // {
-    //     $this->encodePassword($user);
-    // }
+    public function preUpdate(User $user)
+    {
+        $this->encodePassword($user);
+    }
 
     public function encodePassword(User $user)
     {

@@ -59,12 +59,23 @@ class UserController extends AbstractController
     #[Route('/utilisateur/edition-mdp/{id}', name: 'user_edit_password')]
     public function editPassword(User $user, Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('security_login');
+        }
+
+        if ($this->getUser() !== $user) {
+            return $this->redirectToRoute('app_recipe');
+        }
+
         $form = $this->createForm(UserPasswordType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($hasher->isPasswordValid($user, $form->getData()['plainPassword'])) {
-                $user->setPlainPassword($hasher->hashPassword($user, $form->getData()['newPassword']));
+                $user->setUpdatedAt(new \DateTimeImmutable());
+                $user->setPlainPassword(
+                    $form->getData()['newPassword']
+                );
 
                 $manager->persist($user);
                 $manager->flush();
