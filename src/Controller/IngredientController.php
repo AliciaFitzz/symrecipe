@@ -21,10 +21,10 @@ class IngredientController extends AbstractController
     {
         /* je stock les données dans ma variable. 
         j'uilise le bundle paginator, à l'intérieur je met mon repo
-        findAll renvoi un tableau qui récupère toutes les données 
+        findBy va récupérer la liste des ingrédients en fonction de l'utilisateur courant 
         je lui donne la première et la limite de page*/
         $ingredients = $paginator->paginate(
-            $ingredientRepository->findAll(),
+            $ingredientRepository->findBy(['user' => $this->getUser()]),
             $request->query->getInt('page', 1), /*page number*/
             10 /*limit per page*/
         );
@@ -45,6 +45,7 @@ class IngredientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $ingredient = $form->getData();
+            $ingredient->setUser($this->getUser());
 
             $entityManager->persist($ingredient); // comme un commit
             $entityManager->flush(); // comme un push
