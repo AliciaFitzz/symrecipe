@@ -4,19 +4,22 @@ namespace App\Controller;
 
 use App\Entity\Ingredient;
 use App\Form\IngredientType;
-use App\Repository\IngredientRepository;
 use Doctrine\ORM\EntityManager;
+use App\Repository\IngredientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class IngredientController extends AbstractController
 {
     // AFFICHE LA LISTE DES INGREDIENTS
     #[Route('/ingredient', name: 'app_ingredient')]
+    #[IsGranted('ROLE_USER')]
     public function index(IngredientRepository $ingredientRepository, PaginatorInterface $paginator, Request $request): Response
     {
         /* je stock les données dans ma variable. 
@@ -36,6 +39,7 @@ class IngredientController extends AbstractController
 
     // FORMULAIRE DE CREATION D'INGREDIENT
     #[Route('/ingredient/new', name: 'new_ingredient')]
+    #[IsGranted('ROLE_USER')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $ingredient = new Ingredient();
@@ -67,6 +71,8 @@ class IngredientController extends AbstractController
     }
 
     // FORMULAIRE DE MODIFICATION D'UN INGREDIENT
+    // l'utilisateur ne peut modifier que ses propres ingredients
+    #[Security("is_granted('ROLE_USER') and user === ingredient.getUser()")]
     #[Route('/ingredient/edit/{id}', name: 'edit_ingredient')]
     public function edit(Ingredient $ingredient, Request $request, EntityManagerInterface $entityManager): Response
     {

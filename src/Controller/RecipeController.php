@@ -10,12 +10,16 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 class RecipeController extends AbstractController
 {
     // LISTE DES RECETTES
     #[Route('/recipe', name: 'app_recipe')]
+    #[IsGranted('ROLE_USER')]
     public function index(PaginatorInterface $paginator, RecipeRepository $recipeRepository, Request $request): Response
     {
         $recipes = $paginator->paginate(
@@ -31,6 +35,7 @@ class RecipeController extends AbstractController
 
     // FORMULAIRE DE CREATION D'UNE RECETTE
     #[Route('/recipe/new', name: 'new_recipe')]
+    #[IsGranted('ROLE_USER')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
 
@@ -59,6 +64,7 @@ class RecipeController extends AbstractController
     }
 
     // FORMULAIRE DE MODIFICATION D'UNE RECETTE
+    #[Security("is_granted('ROLE_USER') and user === recipe.getUser()")]
     #[Route('/recipe/edit/{id}', name: 'edit_recipe')]
     public function edit(Recipe $recipe, Request $request, EntityManagerInterface $entityManager): Response
     {
