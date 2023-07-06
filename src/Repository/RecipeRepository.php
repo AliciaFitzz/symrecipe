@@ -38,4 +38,19 @@ class RecipeRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    // RECUPERE LES RECETTE EN PUBLIC TRIER PAR LA DERNIERE ENREGISTRER
+    public function findPublicRecipe(?int $nbRecipes): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->where('r.isPublic = 1')
+            ->orderBy('r.createdAt', 'DESC');
+
+        if ($nbRecipes !== 0 || $nbRecipes !== null) {
+            $qb->setMaxResults($nbRecipes);
+        }
+
+        return $qb->getQuery()
+            ->getResult();
+    }
 }

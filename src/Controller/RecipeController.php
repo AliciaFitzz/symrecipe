@@ -33,6 +33,29 @@ class RecipeController extends AbstractController
         ]);
     }
 
+    #[Route('/recipe/public', name: 'recipe_index_public')]
+    public function indexPublic(PaginatorInterface $paginator, RecipeRepository $recipeRepository, Request $request): Response
+    {
+        $recipes = $paginator->paginate(
+            $recipeRepository->findPublicRecipe(null),
+            $request->query->getInt('page', 1)
+        );
+
+        return $this->render('pages/recipe/index_public.html.twig', [
+            'recipes' => $recipes
+        ]);
+    }
+
+    // PARTAGE D'UNE RECETTE EN PUBLIC
+    #[Security("is_granted('ROLE_USER') and recipe.getIsPublic() === true")]
+    #[Route('/recipe/{id}', name: 'recipe_show')]
+    public function show(Recipe $recipe): Response
+    {
+        return $this->render('pages/recipe/show.html.twig', [
+            'recipe' => $recipe
+        ]);
+    }
+
     // FORMULAIRE DE CREATION D'UNE RECETTE
     #[Route('/recipe/new', name: 'new_recipe')]
     #[IsGranted('ROLE_USER')]
