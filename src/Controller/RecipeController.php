@@ -36,6 +36,7 @@ class RecipeController extends AbstractController
         ]);
     }
 
+    // PARTAGER UNE RECETTE EN PUBLIC
     #[Route('/recipe/public', name: 'recipe_index_public')]
     public function indexPublic(PaginatorInterface $paginator, RecipeRepository $recipeRepository, Request $request): Response
     {
@@ -49,11 +50,13 @@ class RecipeController extends AbstractController
         ]);
     }
 
-    // PARTAGE D'UNE RECETTE EN PUBLIC
+    // NOTER UNE RECETTE
     #[Security("is_granted('ROLE_USER') and recipe.getIsPublic() === true")]
     #[Route('/recipe/{id}', name: 'recipe_show')]
     public function show(Recipe $recipe, Request $request, MarkRepository $markRepository, EntityManagerInterface $manager): Response
     {
+
+        dump($recipe);
 
         $mark = new Mark();
 
