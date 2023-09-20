@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Contact;
 use App\Entity\Ingredient;
 use App\Entity\Mark;
 use App\Entity\Recipe;
@@ -12,6 +13,8 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
+// Quand il y a beaucoup de fixtures, on utilise plusieurs fichiers
 
 class AppFixtures extends Fixture
 {
@@ -86,10 +89,21 @@ class AppFixtures extends Fixture
                 $mark = new Mark();
                 $mark->setMark(mt_rand(1, 5))
                     ->setUser($users[mt_rand(0, count($users) - 1)])
-                    ->setReceipe($recipe);
+                    ->setRecipe($recipe);
 
                 $manager->persist($mark);
             }
+        }
+
+        // CONTACT
+        for ($i = 0; $i < 5; $i++) {
+            $contact = new Contact();
+            $contact->setFullName($this->faker->name())
+                ->setEmail($this->faker->email())
+                ->setSubject('Demande n\'° ' . ($i + 1))
+                ->setMessage($this->faker->text());
+
+            $manager->persist($contact);
         }
 
 
