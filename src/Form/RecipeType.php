@@ -163,7 +163,7 @@ class RecipeType extends AbstractType
                 'attr' => [
                     'class' => 'btn btn-primary mt-4'
                 ],
-                'label' => 'Modifier ma recette'
+                'label' => 'Créer ma recette'
             ]);
     }
 

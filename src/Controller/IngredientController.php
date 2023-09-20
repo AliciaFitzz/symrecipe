@@ -104,6 +104,7 @@ class IngredientController extends AbstractController
 
     // SUPPRESSION D'UN INGREDIENT
     #[Route('/ingredient/delete/{id}', name: 'delete_ingredient')]
+    #[Security("is_granted('ROLE_USER') and user === ingredient.getUser()")]
     public function delete(EntityManagerInterface $entityManager, Ingredient $ingredient): Response
     {
         $entityManager->remove($ingredient);

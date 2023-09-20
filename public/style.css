@@ -1,0 +1,8 @@
+#ingredients-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.vich-image img {
+    width: 500px;
+}

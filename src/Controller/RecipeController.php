@@ -36,8 +36,8 @@ class RecipeController extends AbstractController
         ]);
     }
 
-    // PARTAGER UNE RECETTE EN PUBLIC
-    #[Route('/recipe/public', name: 'recipe_index_public')]
+    // AFFICHAGE DES RECETTES PUBIQUES
+    #[Route('/recipe/communaute', name: 'recipe_community')]
     public function indexPublic(PaginatorInterface $paginator, RecipeRepository $recipeRepository, Request $request): Response
     {
         $recipes = $paginator->paginate(
@@ -45,7 +45,7 @@ class RecipeController extends AbstractController
             $request->query->getInt('page', 1)
         );
 
-        return $this->render('pages/recipe/index_public.html.twig', [
+        return $this->render('pages/recipe/community.html.twig', [
             'recipes' => $recipes
         ]);
     }
@@ -155,6 +155,7 @@ class RecipeController extends AbstractController
 
     // SUPPRESSION D'UNE RECETTE
     #[Route('/recipe/delete/{id}', name: 'delete_recipe')]
+    #[Security("is_granted('ROLE_USER') and user === recipe.getUser()")]
     public function delete(EntityManagerInterface $entityManager, Recipe $recipe): Response
     {
         $entityManager->remove($recipe);
