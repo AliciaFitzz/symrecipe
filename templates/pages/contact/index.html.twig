@@ -4,6 +4,7 @@
 
 {% block body %}
     <div class="container">
+        {# Message de succès #}
         {% for message in app.flashes('success') %}
 			<div class="alert alert-success mt-4">
 				{{ message }}
