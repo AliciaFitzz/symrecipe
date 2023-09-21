@@ -4,18 +4,17 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Form\ContactType;
+use App\Service\MailService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Mailer\MailerInterface;
 
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'contact_index')]
-    public function index(Request $request, EntityManagerInterface $manager, MailerInterface $mailer): Response
+    public function index(Request $request, EntityManagerInterface $manager, MailService $mailService): Response
     {
         $contact = new Contact();
 
@@ -34,18 +33,17 @@ class ContactController extends AbstractController
             $manager->persist($contact);
             $manager->flush();
 
-            // Email
-            $email = (new TemplatedEmail()) // Créer un template pour les emails
-                ->from($contact->getEmail())
-                ->to('admin@symrecipe.com')
-                ->subject($contact->getSubject())
-                ->htmlTemplate('emails/contact.html.twig') // Renvoie vers notre template
+            // J'appelle ma fonction d'envoie d'email créee dans le service
+            /* Je remplie les paramètre de la fonction que j'avais déclarer dans le service (ex à côté de chaque paramètre) */
+            $mailService->sendEmail(
+                $contact->getEmail(), // $from
+                $contact->getSubject(), // $subject
+                'emails/contact.html.twig', // $htmlTemplate
+                ['contact' => $contact], //$context
 
-                ->context([
-                    'contact' => $contact
-                ]);
-
-            $mailer->send($email);
+                /* $to n'est pas ici car il est directement définit dans la création de la fonction
+                   (voir la fonction sendEmail pour comparer) */
+            );
 
             // Message de succès
             $this->addFlash(
