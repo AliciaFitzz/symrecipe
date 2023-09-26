@@ -14,7 +14,7 @@ class HomePageTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         // vérifie s'il y a bien un éléments avec les classes mentionnée
-        $button = $crawler->filter('.btn .btn-primary .btn-lgz');
+        $button = $crawler->filter('.btn.btn-primary.btn-lg');
         $this->assertEquals(1, count($button)); // on en attend 1
 
         $recipes = $crawler->filter('.recipes .card');
