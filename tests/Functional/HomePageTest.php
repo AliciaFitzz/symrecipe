@@ -20,6 +20,6 @@ class HomePageTest extends WebTestCase
         $recipes = $crawler->filter('.recipes .card');
         $this->assertEquals(3, count($recipes));
 
-        $this->assertSelectorTextContains('h1', 'Bienvenue sur SymRecipe');
+        $this->assertSelectorTextContains('h1', 'Bienvenue sur eRecipe');
     }
 }

@@ -20,7 +20,7 @@ class ContactTest extends WebTestCase
         $form = $submitButton->form();
 
         $form["contact[fullName]"] = "Jean Dupont";
-        $form["contact[email]"] = "jd@symrecipe.com";
+        $form["contact[email]"] = "jd@eRecipe.com";
         $form["contact[subject]"] = "Test";
         $form["contact[message]"] = "Test";
 

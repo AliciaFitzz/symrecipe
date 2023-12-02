@@ -18,7 +18,7 @@ class LoginTest extends WebTestCase
 
         // Gérer le formulaire
         $form = $crawler->filter('form[name=login]')->form([
-            "_username" => 'admin@symrecipe.fr',
+            "_username" => 'admin@eRecipe.fr',
             '_password' => 'password'
         ]);
 
@@ -42,7 +42,7 @@ class LoginTest extends WebTestCase
 
         // Gérer le formulaire
         $form = $crawler->filter('form[name=login]')->form([
-            "_username" => 'admin@symrecipe.fr',
+            "_username" => 'admin@eRecipe.fr',
             '_password' => 'password'
         ]);
 

@@ -85,9 +85,6 @@ class RecipeController extends AbstractController
     #[Route('/recipe/{id}', name: 'recipe_show')]
     public function show(Recipe $recipe, Request $request, MarkRepository $markRepository, EntityManagerInterface $manager): Response
     {
-
-        dump($recipe);
-
         $mark = new Mark();
 
         $form = $this->createForm(MarkType::class, $mark);

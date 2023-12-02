@@ -17,7 +17,7 @@ class MailService
     }
 
     // ENVOIE D'UN EMAIL
-    public function sendEmail(string $from, string $subject, string $htmlTemplate, array $context, string $to = 'admin@symrecipe.com'): void
+    public function sendEmail(string $from, string $subject, string $htmlTemplate, array $context, string $to = 'admin@eRecipe.com'): void
     {
         $email = (new TemplatedEmail()) // Créer un template pour les emails
             ->from($from)

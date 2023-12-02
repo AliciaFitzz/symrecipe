@@ -1,59 +1,69 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SymRecipe - {{ recipe.name }}{% endblock %}
+{% block title %}eRecipe -
+	{{ recipe.name }}
+{% endblock %}
 
 {% block body %}
 
-    <div class="container">
+	<div class="container">
 
-    {% for message in app.flashes('success') %}
-		<div class="alert alert-success mt-4">
-			{{ message }}
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success mt-4">
+				{{ message }}
+			</div>
+		{% endfor %}
+
+		<h1 class="mt-4">{{ recipe.name }}</h1>
+
+		<div class"recipe__image">
+			<img style="max-width: 500px" src="{{ vich_uploader_asset(recipe, 'imageFile') }}" alt="">
 		</div>
-	{% endfor %}
 
-        <h1 class="mt-4">{{ recipe.name }}</h1>
+		<p>Note :
+			{{recipe.average|number_format(2, '.', ',') }}/5</p>
 
-        <div class"recipe__image">
-            <img style="max-width: 500px" src="{{ vich_uploader_asset(recipe, 'imageFile') }}" alt="">
-        </div>
+		<span class="badge bg-primary">Créée le
+			{{ recipe.createdAt|date('d/m/Y') }}</span>
 
-        <p>Note : {{recipe.average|number_format(2, '.', ',') }}/5</p>
+		{% if recipe.time %}
+			<p>Temps (en minutes) :
+				{{ recipe.time }}</p>
+		{% else %}
+			<p>Temps non renseigné</p>
+		{% endif %}
+		{% if recipe.nbPeople %}
+			<p>Pour :
+				{{ recipe.nbPeople }}
+				personnes</p>
+		{% else %}
+			<p>Nombre non renseigné</p>
+		{% endif %}
+		{% if recipe.difficulty %}
+			<p>Difficulté :
+				{{ recipe.difficulty }}/5</p>
+		{% else %}
+			<p>Difficulté non renseigné</p>
+		{% endif %}
+		{% if recipe.price %}
+			<p>Prix :
+				{{ recipe.price }}€</p>
+		{% else %}
+			<p>Prix non renseigné</p>
+		{% endif %}
+		<div>
+			{{ recipe.description|raw }}
+		</div>
 
-        <span class="badge bg-primary">Créée le {{ recipe.createdAt|date('d/m/Y') }}</span>
+		<p class="mt-4">Ingrédients</p>
+		{% for ingredient in recipe.ingredients %}
+			<span class="badge bg-primary">{{ ingredient.name }}
+			</span>
+		{% endfor %}
 
-    {% if recipe.time %}
-        <p>Temps (en minutes) : {{ recipe.time }}</p>
-    {% else %}
-        <p>Temps non renseigné</p>
-    {% endif %}
-    {% if recipe.nbPeople %}
-        <p>Pour : {{ recipe.nbPeople }} personnes</p>
-    {% else %}
-        <p>Nombre non renseigné</p>
-    {% endif %}
-    {% if recipe.difficulty %}
-        <p>Difficulté : {{ recipe.difficulty }}/5</p>
-    {% else %}
-        <p>Difficulté non renseigné</p>
-    {% endif %}
-    {% if recipe.price %}
-        <p>Prix : {{ recipe.price }}€</p>
-    {% else %}
-        <p>Prix non renseigné</p>
-    {% endif %}
-        <div>
-            {{ recipe.description|raw }}
-        </div>
+		<div class="mark">
+			{{ form(form) }}
+			</div>
+		</div>
 
-        <p class="mt-4">Ingrédients</p>
-        {% for ingredient in recipe.ingredients %}
-            <span class="badge bg-primary">{{ ingredient.name }}    </span>
-        {% endfor %}
-
-        <div class="mark">
-            {{ form(form) }}
-        </div>
-    </div>
-
-{% endblock %}
+	{% endblock %}

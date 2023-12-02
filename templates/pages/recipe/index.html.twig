@@ -1,70 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SymRecipe - Mes recettes{% endblock %}
+{% block title %}eRecipe - Mes recettes
+{% endblock %}
 
 {% block body %}
 
-<div class="container mt-4">
+	<div class="container mt-4">
 
-  {% for message in app.flashes('success') %}
-		<div class="alert alert-success mt-4">
-			{{ message }}
-		</div>
-	{% endfor %}
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success mt-4">
+				{{ message }}
+			</div>
+		{% endfor %}
 
-  {% if not recipes.items is same as([]) %}
+		{% if not recipes.items is same as([]) %}
 
-  <h1>Mes recettes</h1>
+			<h1>Mes recettes</h1>
 
-  <a href="{{ path('new_recipe') }}" class="btn btn-primary">Créer une recette</a>
+			<a href="{{ path('new_recipe') }}" class="btn btn-primary">Créer une recette</a>
 
-  {# total items count #}
-  <div class="count mt-4">
-      <p> Il y a {{ recipes.getTotalItemCount }} recette(s) au total.</p>
-  </div>
+			{# total items count #}
+			<div class="count mt-4">
+				<p>
+					Il y a
+					{{ recipes.getTotalItemCount }}
+					recette(s) au total.</p>
+			</div>
 
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th scope="col">Numéro</th>
-        <th scope="col">Nom</th>
-        <th scope="col">Prix</th>
-        <th scope="col">Difficulté</th>
-        <th scope="col">Date de création</th>
-        <th scope="col">Modifier</th>
-        <th scope="col">Supprimer</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for recipe in recipes %}
-      <tr class="table-primary">
-        <th scope="row">{{ recipe.id }}</th>
-        <td>{{ recipe.name }}</td>
-        <td>{{ recipe.price is null ? 'Non renseigné' : recipe.price|number_format(2, '.', '.') }} €</td>
-        <td>{{ recipe.difficulty is null ? 'Non renseigné' : recipe.difficulty }}</td>
-        {# pour afficher une date il faut utiliser le filtre date sinon twig essai de la lire en string #}
-        <td>{{ recipe.createdAt|date("d/m/Y") }}</td>
-        <td>
-          <a href="{{ path('edit_recipe', {id: recipe.id}) }}" class="btn btn-info">Modifier</a>
-        </td>
-        <td>
-          <a href="{{ path('delete_recipe', {id: recipe.id}) }}" class="btn btn-warning">Supprimer</a>
-        </td>
-      </tr>
-  
-    {% endfor %}
-    </tbody>
-  </table>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Numéro</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Prix</th>
+						<th scope="col">Difficulté</th>
+						<th scope="col">Date de création</th>
+						<th scope="col">Modifier</th>
+						<th scope="col">Supprimer</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for recipe in recipes %}
+						<tr class="table-primary">
+							<th scope="row">{{ recipe.id }}</th>
+							<td>{{ recipe.name }}</td>
+							<td>{{ recipe.price is null ? 'Non renseigné' : recipe.price|number_format(2, '.', '.') }}
+								€</td>
+							<td>{{ recipe.difficulty is null ? 'Non renseigné' : recipe.difficulty }}</td>
+							{# pour afficher une date il faut utiliser le filtre date sinon twig essai de la lire en string #}
+							<td>{{ recipe.createdAt|date("d/m/Y") }}</td>
+							<td>
+								<a href="{{ path('edit_recipe', {id: recipe.id}) }}" class="btn btn-info">Modifier</a>
+							</td>
+							<td>
+								<a href="{{ path('delete_recipe', {id: recipe.id}) }}" class="btn btn-warning">Supprimer</a>
+							</td>
+						</tr>
 
-  <div class="navigation d-flex justify-content-center">
-      {{ knp_pagination_render(recipes) }}
-  </div>
+					{% endfor %}
+				</tbody>
+			</table>
 
-  {% else %}
-        <p>Il n'y a pas de recette</p>
+			<div class="navigation d-flex justify-content-center">
+				{{ knp_pagination_render(recipes) }}
+			</div>
 
-         <a href="{{ path('new_recipe') }}" class="btn btn-primary">Créer une recette</a>
-  {% endif %}
-  </div>
+		{% else %}
+			<p>Il n'y a pas de recette</p>
+
+			<a href="{{ path('new_recipe') }}" class="btn btn-primary">Créer une recette</a>
+		{% endif %}
+	</div>
 
 {% endblock %}

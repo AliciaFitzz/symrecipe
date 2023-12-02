@@ -24,7 +24,7 @@ class UserCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInPlural('Utilisateurs') // Label au pluriel
             ->setEntityLabelInSingular('Utilisateur') // Label au singulier
-            ->setPageTitle('index', 'SymRecipe - Gestion des utilisateurs') // nom de la page
+            ->setPageTitle('index', 'eRecipe - Gestion des utilisateurs') // nom de la page
             ->setPaginatorPageSize(10); // nombre d'utilisateurs par page
     }
 
